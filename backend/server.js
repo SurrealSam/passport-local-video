@@ -9,9 +9,12 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const app = express();
 const User = require("./user");
+const dotenv = require('dotenv');
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
+
+dotenv.config();
 mongoose.connect(
-  "mongodb+srv://{Place Your Username Here!}:{Place Your Password Here!}@cluster0-q9g9s.mongodb.net/test?retryWrites=true&w=majority",
+  process.env.DATABASE_ACCESS,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -32,12 +35,12 @@ app.use(
 );
 app.use(
   session({
-    secret: "secretcode",
+    secret: process.env.SECRET_CODE,
     resave: true,
     saveUninitialized: true,
   })
 );
-app.use(cookieParser("secretcode"));
+app.use(cookieParser(process.env.SECRET_CODE));
 app.use(passport.initialize());
 app.use(passport.session());
 require("./passportConfig")(passport);
